@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia Morar Bem · Barra dos Coqueiros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #0077B6;
+    --ocean-deep: #023E8A;
+    --ocean-light: #48CAE4;
+    --verde-agua: #52B69A;
+    --areia: #E9C46A;
+    --areia-claro: #F4E1B5;
+    --coral: #E76F51;
+    --dourado: #C9A84C;
+    --branco: #FAFCFF;
+    --off-white: #F0F4F8;
+    --cinza-suave: #E8EDF2;
+    --texto: #1A2B3C;
+    --texto-leve: #5A7080;
+    --sidebar-w: 260px;
+    --sidebar-collapsed: 70px;
+    --trans: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+    overflow-x: hidden;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: linear-gradient(180deg, var(--ocean-deep) 0%, #011F4B 60%, #010D1E 100%);
+    z-index: 1000;
+    transition: width 0.35s var(--trans);
+    overflow: hidden;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar.collapsed { width: var(--sidebar-collapsed); }
+
+  .sidebar-header {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--areia), var(--coral));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    white-space: nowrap;
+    transition: opacity 0.25s var(--trans);
+  }
+
+  .sidebar.collapsed .logo-text { opacity: 0; pointer-events: none; }
+
+  .logo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .logo-sub {
+    font-size: 10px;
+    color: var(--areia);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-toggle {
+    margin-top: 16px;
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 14px;
+  }
+
+  .sidebar-toggle:hover {
+    background: rgba(255,255,255,0.12);
+    color: white;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+
+  .nav-section-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 16px 20px 6px;
+    white-space: nowrap;
+    transition: opacity 0.25s;
+  }
+
+  .sidebar.collapsed .nav-section-label { opacity: 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 20px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s var(--trans);
+    position: relative;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(var(--areia), var(--coral));
+    border-radius: 0 3px 3px 0;
+    transform: scaleY(0);
+    transition: transform 0.2s var(--trans);
+  }
+
+  .nav-item:hover,
+  .nav-item.active {
+    color: white;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .nav-item:hover::before,
+  .nav-item.active::before { transform: scaleY(1); }
+
+  .nav-icon {
+    width: 20px; height: 20px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  .nav-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: opacity 0.25s;
+  }
+
+  .sidebar.collapsed .nav-label { opacity: 0; pointer-events: none; }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+
+  .sidebar-social {
+    display: flex;
+    gap: 10px;
+    transition: opacity 0.25s;
+  }
+
+  .sidebar.collapsed .sidebar-social { opacity: 0; pointer-events: none; }
+
+  .social-btn {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .social-btn:hover {
+    background: var(--coral);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main-wrapper {
+    margin-left: var(--sidebar-w);
+    transition: margin-left 0.35s var(--trans);
+    min-height: 100vh;
+  }
+
+  .main-wrapper.expanded { margin-left: var(--sidebar-collapsed); }
+
+  /* ─── TOP BAR ─── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: rgba(250,252,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cinza-suave);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topbar-breadcrumb {
+    font-size: 13px;
+    color: var(--texto-leve);
+  }
+
+  .topbar-breadcrumb span {
+    color: var(--ocean);
+    font-weight: 600;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--off-white);
+    border: 1px solid var(--cinza-suave);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--texto-leve);
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 200px;
+  }
+
+  .topbar-search:hover {
+    border-color: var(--ocean-light);
+    background: white;
+  }
+
+  .topbar-weather {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--texto-leve);
+    background: var(--off-white);
+    padding: 6px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--cinza-suave);
+  }
+
+  /* ─── PAGES ─── */
+  .page { display: none; animation: fadeIn 0.4s var(--trans); }
+  .page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── HERO / CARROSSEL ─── */
+  .hero {
+    position: relative;
+    height: 520px;
+    overflow: hidden;
+  }
+
+  .hero-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s var(--trans);
+  }
+
+  .hero-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* Placeholder gradients para simular fotos da Barra dos Coqueiros */
+  .slide-1 {
+    background: linear-gradient(135deg,
+      #0077B6 0%, #023E8A 30%, #00B4D8 60%, #90E0EF 100%);
+  }
+  .slide-2 {
+    background: linear-gradient(135deg,
+      #52B69A 0%, #168AAD 40%, #1E6091 100%);
+  }
+  .slide-3 {
+    background: linear-gradient(135deg,
+      #E9C46A 0%, #F4A261 40%, #E76F51 80%, #C77DFF 100%);
+  }
+  .slide-4 {
+    background: linear-gradient(135deg,
+      #2D6A4F 0%, #52B69A 50%, #0077B6 100%);
+  }
+
+  .slide-photo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    color: rgba(255,255,255,0.12);
+    font-style: italic;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(2,30,70,0.72) 0%,
+      rgba(2,30,70,0.35) 50%,
+      rgba(0,0,0,0.1) 100%
+    );
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 48px 56px;
+    background: linear-gradient(to top, rgba(2,30,70,0.8) 0%, transparent 100%);
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.2);
+    border: 1px solid rgba(201,168,76,0.4);
+    border-radius: 100px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--areia);
+    margin-bottom: 16px;
+    animation: slideUp 0.6s var(--trans) 0.2s both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    animation: slideUp 0.6s var(--trans) 0.35s both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--areia);
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 28px;
+    font-weight: 300;
+    animation: slideUp 0.6s var(--trans) 0.5s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    animation: slideUp 0.6s var(--trans) 0.65s both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--areia), var(--coral));
+    color: white;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(201,168,76,0.5);
+  }
+
+  .btn-ghost {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 13px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(4px);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  .hero-dots {
+    position: absolute;
+    bottom: 20px;
+    right: 48px;
+    display: flex;
+    gap: 6px;
+  }
+
+  .hero-dot {
+    width: 6px; height: 6px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .hero-dot.active {
+    background: var(--areia);
+    width: 20px;
+  }
+
+  /* ─── CONTENT AREA ─── */
+  .content-area {
+    padding: 40px 40px 60px;
+  }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .section-title-group {}
+
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ocean);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--ocean);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1.2;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--ocean);
+  }
+
+  .see-all {
+    font-size: 13px;
+    color: var(--ocean);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    border: 1px solid rgba(0,119,182,0.25);
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+
+  .see-all:hover {
+    background: var(--ocean);
+    color: white;
+    border-color: var(--ocean);
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: -40px 40px 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.25s;
+    border: 1px solid var(--cinza-suave);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 36px rgba(0,0,0,0.12);
+  }
+
+  .stat-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .stat-icon.ocean { background: rgba(0,119,182,0.1); }
+  .stat-icon.verde { background: rgba(82,182,154,0.1); }
+  .stat-icon.areia { background: rgba(233,196,106,0.12); }
+  .stat-icon.coral { background: rgba(231,111,81,0.1); }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--texto-leve);
+    margin-top: 2px;
+  }
+
+  /* ─── DESTAQUES DA SEMANA ─── */
+  .destaques-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: 220px 220px;
+    gap: 14px;
+  }
+
+  .destaque-card {
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s var(--trans);
+  }
+
+  .destaque-card:first-child {
+    grid-row: 1 / 3;
+  }
+
+  .destaque-card:hover { transform: scale(1.02); }
+  .destaque-card:hover .dc-overlay { opacity: 0.85; }
+
+  .dc-bg {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s var(--trans);
+  }
+
+  .destaque-card:hover .dc-bg { transform: scale(1.06); }
+
+  .dc-bg-1 { background: linear-gradient(160deg, #0077B6 0%, #023E8A 60%, #48CAE4 100%); }
+  .dc-bg-2 { background: linear-gradient(160deg, #52B69A 0%, #168AAD 100%); }
+  .dc-bg-3 { background: linear-gradient(160deg, #E9C46A 0%, #F4A261 60%, #E76F51 100%); }
+  .dc-bg-4 { background: linear-gradient(160deg, #023E8A 0%, #52B69A 100%); }
+  .dc-bg-5 { background: linear-gradient(160deg, #E76F51 0%, #C9A84C 100%); }
+
+  .dc-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    opacity: 0.2;
+  }
+
+  .dc-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(2,14,40,0.75) 0%, transparent 60%);
+    opacity: 0.75;
+    transition: opacity 0.3s;
+  }
+
+  .dc-content {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 20px 18px;
+  }
+
+  .dc-cat {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(201,168,76,0.25);
+    border: 1px solid rgba(201,168,76,0.5);
+    color: var(--areia);
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 8px;
+  }
+
+  .dc-title {
+    font-family: 'Playfair Display', serif;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .destaque-card:first-child .dc-title { font-size: 26px; }
+
+  .dc-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+  }
+
+  /* ─── CARDS GRID ─── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .cards-grid.col4 { grid-template-columns: repeat(4, 1fr); }
+
+  .card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--cinza-suave);
+    transition: all 0.3s var(--trans);
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(0,77,120,0.12);
+    border-color: rgba(0,119,182,0.2);
+  }
+
+  .card-thumb {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-thumb-bg {
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s var(--trans);
+  }
+
+  .card:hover .card-thumb-bg { transform: scale(1.06); }
+
+  .card-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 100px;
+    color: white;
+  }
+
+  .badge-ocean { background: var(--ocean); }
+  .badge-verde { background: var(--verde-agua); }
+  .badge-coral { background: var(--coral); }
+  .badge-dourado { background: var(--dourado); color: #333; }
+
+  .card-body { padding: 18px 18px 16px; }
+
+  .card-cat {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ocean);
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--texto-leve);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--cinza-suave);
+  }
+
+  .card-meta {
+    font-size: 12px;
+    color: var(--texto-leve);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-sm {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ocean);
+    background: rgba(0,119,182,0.08);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-sm:hover { background: var(--ocean); color: white; }
+
+  /* ─── BANNER PUBLICITÁRIO ─── */
+  .ad-banner {
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean) 50%, var(--ocean-light) 100%);
+    border-radius: 20px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 40px;
+  }
+
+  .ad-banner::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .ad-banner::after {
+    content: '';
+    position: absolute;
+    right: 60px; bottom: -60px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .ad-text .ad-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+
+  .ad-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  .ad-text p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .btn-ad {
+    background: white;
+    color: var(--ocean-deep);
+    border: none;
+    padding: 13px 28px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-ad:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  /* ─── MAPA ─── */
+  .mapa-container {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--cinza-suave);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+
+  .mapa-embed {
+    width: 100%;
+    height: 420px;
+    border: none;
+    display: block;
+  }
+
+  .mapa-header {
+    background: white;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--cinza-suave);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mapa-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto);
+  }
+
+  .mapa-filter {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mapa-tag {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--cinza-suave);
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--texto-leve);
+    background: white;
+  }
+
+  .mapa-tag.active,
+  .mapa-tag:hover {
+    background: var(--ocean);
+    color: white;
+    border-color: var(--ocean);
+  }
+
+  /* ─── ENCARTES ─── */
+  .encartes-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .encarte-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--cinza-suave);
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .encarte-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+  }
+
+  .encarte-thumb {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    position: relative;
+  }
+
+  .encarte-info {
+    padding: 14px 14px 12px;
+  }
+
+  .encarte-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--texto);
+    margin-bottom: 2px;
+  }
+
+  .encarte-valid {
+    font-size: 11px;
+    color: var(--texto-leve);
+  }
+
+  .encarte-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--coral);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── SOBRE ─── */
+  .sobre-hero {
+    background: linear-gradient(135deg, var(--ocean-deep) 0%, var(--ocean) 100%);
+    border-radius: 24px;
+    padding: 56px 60px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sobre-hero::before {
+    content: '🌴';
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 120px;
+    opacity: 0.15;
+  }
+
+  .sobre-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: white;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .sobre-hero h1 em { font-style: italic; color: var(--areia); }
+
+  .sobre-hero p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  .sobre-pilares {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .pilar-card {
+    background: white;
+    border-radius: 18px;
+    padding: 28px 24px;
+    border: 1px solid var(--cinza-suave);
+    transition: all 0.25s;
+    text-align: center;
+  }
+
+  .pilar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+  }
+
+  .pilar-icon {
+    font-size: 36px;
+    margin-bottom: 14px;
+  }
+
+  .pilar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto);
+    margin-bottom: 8px;
+  }
+
+  .pilar-desc {
+    font-size: 13.5px;
+    color: var(--texto-leve);
+    line-height: 1.6;
+  }
+
+  /* ─── FORMULÁRIOS ─── */
+  .form-page-hero {
+    background: linear-gradient(135deg, var(--verde-agua) 0%, var(--ocean) 100%);
+    border-radius: 24px;
+    padding: 40px 48px;
+    margin-bottom: 36px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-page-hero::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .form-page-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .form-page-hero p {
+    font-size: 15px;
+    opacity: 0.8;
+    max-width: 480px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+  }
+
+  .form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 36px 32px;
+    border: 1px solid var(--cinza-suave);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .form-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--texto);
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 7px;
+    letter-spacing: 0.02em;
+  }
+
+  .form-input,
+  .form-textarea,
+  .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--cinza-suave);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--texto);
+    background: var(--off-white);
+    transition: all 0.2s;
+    outline: none;
+    resize: vertical;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus,
+  .form-select:focus {
+    border-color: var(--ocean);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0,119,182,0.1);
+  }
+
+  .form-textarea { min-height: 120px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .btn-form {
+    width: 100%;
+    background: linear-gradient(135deg, var(--ocean), var(--ocean-deep));
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-form:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(2,62,138,0.3);
+  }
+
+  .form-info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px;
+    border: 1px solid var(--cinza-suave);
+    height: fit-content;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+
+  .form-info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--texto);
+    margin-bottom: 20px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--cinza-suave);
+  }
+
+  .contact-item:last-child { border-bottom: none; }
+
+  .contact-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--off-white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .contact-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--texto-leve);
+    margin-bottom: 2px;
+  }
+
+  .contact-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texto);
+  }
+
+  .social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .social-link {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--off-white);
+    border: 1px solid var(--cinza-suave);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .social-link:hover {
+    background: var(--ocean);
+    color: white;
+    border-color: var(--ocean);
+    transform: translateY(-3px);
+  }
+
+  /* ─── SUCCESS MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s var(--trans);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  }
+
+  .modal-overlay.show .modal-box { transform: scale(1); }
+
+  .modal-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--texto);
+    margin-bottom: 10px;
+  }
+
+  .modal-desc {
+    font-size: 14px;
+    color: var(--texto-leve);
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  /* ─── GUIA DA BARRA ─── */
+  .guia-intro {
+    background: linear-gradient(135deg, #0077B6 0%, #023E8A 100%);
+    border-radius: 24px;
+    padding: 48px 52px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+  }
+
+  .guia-intro::before {
+    content: '🌊';
+    position: absolute;
+    right: 48px; bottom: -10px;
+    font-size: 140px;
+    opacity: 0.12;
+  }
+
+  .guia-intro h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  .guia-intro h1 em { font-style: italic; color: var(--areia); }
+
+  .guia-intro p {
+    font-size: 15px;
+    opacity: 0.8;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .guia-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .guia-mini-card {
+    background: white;
+    border-radius: 16px;
+    padding: 22px 18px;
+    border: 1px solid var(--cinza-suave);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .guia-mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    border-color: var(--ocean-light);
+  }
+
+  .guia-mini-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .guia-mini-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--texto);
+    margin-bottom: 4px;
+  }
+
+  .guia-mini-count {
+    font-size: 12px;
+    color: var(--ocean);
+    font-weight: 600;
+  }
+
+  /* ─── PAGE SECTION ─── */
+  .page-section {
+    margin-bottom: 48px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--cinza-suave);
+    margin: 40px 0;
+  }
+
+  /* ─── THUMB BACKGROUNDS PARA CARDS ─── */
+  .tb-1 { background: linear-gradient(135deg, #0077B6, #48CAE4); }
+  .tb-2 { background: linear-gradient(135deg, #52B69A, #168AAD); }
+  .tb-3 { background: linear-gradient(135deg, #E9C46A, #F4A261); }
+  .tb-4 { background: linear-gradient(135deg, #E76F51, #C77DFF); }
+  .tb-5 { background: linear-gradient(135deg, #2D6A4F, #52B69A); }
+  .tb-6 { background: linear-gradient(135deg, #023E8A, #0077B6); }
+  .tb-7 { background: linear-gradient(135deg, #F4A261, #E76F51); }
+  .tb-8 { background: linear-gradient(135deg, #90E0EF, #0077B6); }
+
+  .card-icon-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 52px;
+    opacity: 0.25;
+  }
+
+  /* ─── ANUNCIE PAGE ─── */
+  .anuncie-hero {
+    background: linear-gradient(135deg, var(--dourado) 0%, var(--coral) 60%, var(--ocean) 100%);
+    border-radius: 24px;
+    padding: 48px 52px;
+    margin-bottom: 40px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .anuncie-hero::before {
+    content: '📣';
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 120px;
+    opacity: 0.15;
+  }
+
+  .anuncie-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .anuncie-hero p {
+    font-size: 15px;
+    opacity: 0.85;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  .planos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .plano-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px 24px;
+    border: 1.5px solid var(--cinza-suave);
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .plano-card.featured {
+    border-color: var(--ocean);
+    box-shadow: 0 8px 36px rgba(0,119,182,0.15);
+    transform: scale(1.03);
+  }
+
+  .plano-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+  }
+
+  .plano-card.featured:hover { transform: scale(1.03) translateY(-4px); }
+
+  .plano-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ocean);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .plano-icon { font-size: 36px; margin-bottom: 12px; }
+
+  .plano-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--texto);
+    margin-bottom: 6px;
+  }
+
+  .plano-preco {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--ocean);
+    margin-bottom: 4px;
+  }
+
+  .plano-preco span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--texto-leve);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .plano-desc {
+    font-size: 13px;
+    color: var(--texto-leve);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .plano-features {
+    list-style: none;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+
+  .plano-features li {
+    font-size: 13px;
+    color: var(--texto);
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .plano-features li::before {
+    content: '✓';
+    color: var(--verde-agua);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .btn-plano {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--ocean);
+    color: var(--ocean);
+    background: transparent;
+  }
+
+  .btn-plano.featured-btn {
+    background: var(--ocean);
+    color: white;
+  }
+
+  .btn-plano:hover {
+    background: var(--ocean);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* ─── MOBILE ─── */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px; height: 52px;
+    background: var(--ocean);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 1100;
+    box-shadow: 0 4px 20px rgba(0,119,182,0.4);
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      transform: translateX(-100%);
+      width: var(--sidebar-w) !important;
+    }
+
+    .sidebar.mobile-open { transform: translateX(0); }
+
+    .main-wrapper,
+    .main-wrapper.expanded {
+      margin-left: 0 !important;
+    }
+
+    .mobile-toggle { display: flex; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); margin: -30px 20px 0; }
+    .content-area { padding: 24px 20px 60px; }
+    .topbar { padding: 0 20px; }
+    .hero-content { padding: 28px 24px; }
+    .hero-title { font-size: 32px; }
+    .destaques-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .destaque-card:first-child { grid-row: auto; }
+    .cards-grid { grid-template-columns: 1fr 1fr; }
+    .cards-grid.col4 { grid-template-columns: 1fr 1fr; }
+    .encartes-grid { grid-template-columns: 1fr 1fr; }
+    .guia-cards { grid-template-columns: repeat(2, 1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+    .sobre-pilares { grid-template-columns: 1fr; }
+    .planos-grid { grid-template-columns: 1fr; }
+    .plano-card.featured { transform: scale(1); }
+    .ad-banner { flex-direction: column; text-align: center; }
+    .topbar-weather,
+    .topbar-search { display: none; }
+  }
+
+  @media (max-width: 540px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .destaques-grid { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="#" class="sidebar-logo" onclick="showPage('home')">
+      <div class="logo-icon">🌴</div>
+      <div class="logo-text">
+        <div class="logo-title">Guia Morar Bem</div>
+        <div class="logo-sub">Barra dos Coqueiros</div>
+      </div>
+    </a>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Recolher menu">
+      <span id="toggle-icon">◀</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+
+    <button class="nav-item active" onclick="showPage('home')" data-page="home">
+      <div class="nav-icon">🏠</div>
+      <span class="nav-label">Início</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('guia')" data-page="guia">
+      <div class="nav-icon">🗺️</div>
+      <span class="nav-label">Guia da Barra</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('sobre')" data-page="sobre">
+      <div class="nav-icon">ℹ️</div>
+      <span class="nav-label">Sobre o Guia</span>
+    </button>
+
+    <div class="nav-section-label">Explorar</div>
+
+    <button class="nav-item" onclick="showPage('estilo')" data-page="estilo">
+      <div class="nav-icon">✨</div>
+      <span class="nav-label">Estilo de Vida</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('gastronomia')" data-page="gastronomia">
+      <div class="nav-icon">🍽️</div>
+      <span class="nav-label">Gastronomia</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('lazer')" data-page="lazer">
+      <div class="nav-icon">🏖️</div>
+      <span class="nav-label">Lazer</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('turismo')" data-page="turismo">
+      <div class="nav-icon">🧭</div>
+      <span class="nav-label">Turismo</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('esportes')" data-page="esportes">
+      <div class="nav-icon">⚽</div>
+      <span class="nav-label">Esportes</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('negocios')" data-page="negocios">
+      <div class="nav-icon">💼</div>
+      <span class="nav-label">Negócios</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('encartes')" data-page="encartes">
+      <div class="nav-icon">🛒</div>
+      <span class="nav-label">Encartes</span>
+    </button>
+
+    <div class="nav-section-label">Contato</div>
+
+    <button class="nav-item" onclick="showPage('anuncie')" data-page="anuncie">
+      <div class="nav-icon">📣</div>
+      <span class="nav-label">Anuncie no Guia</span>
+    </button>
+
+    <button class="nav-item" onclick="showPage('contato')" data-page="contato">
+      <div class="nav-icon">💬</div>
+      <span class="nav-label">Fale Conosco</span>
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-social">
+      <a class="social-btn" title="Instagram">📸</a>
+      <a class="social-btn" title="Facebook">👥</a>
+      <a class="social-btn" title="WhatsApp">💬</a>
+      <a class="social-btn" title="YouTube">▶️</a>
+    </div>
+  </div>
+</aside>
+
+<!-- ─── MAIN WRAPPER ─── -->
+<div class="main-wrapper" id="main-wrapper">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-breadcrumb" id="breadcrumb">
+        <span>Início</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-weather">☀️ 28°C · Barra dos Coqueiros</div>
+      <div class="topbar-search">🔍 Buscar no guia…</div>
+    </div>
+  </header>
+
+  <!-- ═══ PAGE: HOME ═══ -->
+  <div class="page active" id="page-home">
+
+    <!-- HERO CARROSSEL -->
+    <section class="hero">
+      <div class="hero-slides" id="heroSlides">
+        <div class="hero-slide slide-1">
+          <div class="slide-photo-text">Praia do Viral</div>
+        </div>
+        <div class="hero-slide slide-2">
+          <div class="slide-photo-text">Pontal do Coruripe</div>
+        </div>
+        <div class="hero-slide slide-3">
+          <div class="slide-photo-text">Pôr do Sol</div>
+        </div>
+        <div class="hero-slide slide-4">
+          <div class="slide-photo-text">Coqueirais</div>
+        </div>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-tag">🌴 Barra dos Coqueiros · SE</div>
+        <h1 class="hero-title">O melhor da Barra<br>na palma da sua <em>mão</em></h1>
+        <p class="hero-subtitle">Restaurantes, praias, negócios, turismo e qualidade de vida num só lugar.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="showPage('guia')">🗺️ Explorar Guia</button>
+          <button class="btn-ghost" onclick="showPage('anuncie')">📣 Anuncie aqui</button>
+        </div>
+      </div>
+      <div class="hero-dots" id="heroDots"></div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon ocean">🏪</div>
+        <div>
+          <div class="stat-num">180+</div>
+          <div class="stat-label">Negócios cadastrados</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon verde">🌊</div>
+        <div>
+          <div class="stat-num">12</div>
+          <div class="stat-label">Praias mapeadas</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon areia">🍽️</div>
+        <div>
+          <div class="stat-num">64</div>
+          <div class="stat-label">Restaurantes e bares</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon coral">⭐</div>
+        <div>
+          <div class="stat-num">4.9</div>
+          <div class="stat-label">Avaliação média</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-area">
+
+      <!-- DESTAQUES DA SEMANA -->
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-eyebrow">Em alta agora</div>
+            <h2 class="section-title">Destaques da <em>Semana</em></h2>
+          </div>
+          <a href="#" class="see-all">Ver todos →</a>
+        </div>
+
+        <div class="destaques-grid">
+          <div class="destaque-card">
+            <div class="dc-bg dc-bg-1" style="height:100%">
+              <div class="dc-placeholder">🌊</div>
+            </div>
+            <div class="dc-overlay"></div>
+            <div class="dc-content">
+              <span class="dc-cat">🏖️ Turismo</span>
+              <div class="dc-title">Praia do Viral: o cartão postal que você precisa conhecer</div>
+              <div class="dc-meta">⭐ 4.9 · 2 km do centro</div>
+            </div>
+          </div>
+          <div class="destaque-card">
+            <div class="dc-bg dc-bg-2" style="height:100%">
+              <div class="dc-placeholder">🍤</div>
+            </div>
+            <div class="dc-overlay"></div>
+            <div class="dc-content">
+              <span class="dc-cat">🍽️ Gastronomia</span>
+              <div class="dc-title">Melhores frutos do mar da Barra</div>
+              <div class="dc-meta">📍 Orla da Barra</div>
+            </div>
+          </div>
+          <div class="destaque-card">
+            <div class="dc-bg dc-bg-3" style="height:100%">
+              <div class="dc-placeholder">🌅</div>
+            </div>
+            <div class="dc-overlay"></div>
+            <div class="dc-content">
+              <span class="dc-cat">✨ Estilo de Vida</span>
+              <div class="dc-title">Pôr do sol na Barra: os 5 melhores pontos</div>
+              <div class="dc-meta">🕐 Esta semana</div>
+            </div>
+          </div>
+          <div class="destaque-card">
+            <div class="dc-bg dc-bg-4" style="height:100%">
+              <div class="dc-placeholder">⚽</div>
+            </div>
+            <div class="dc-overlay"></div>
+            <div class="dc-content">
+              <span class="dc-cat">⚽ Esportes</span>
+              <div class="dc-title">Esportes aquáticos em expansão</div>
+              <div class="dc-meta">🔥 Tendência</div>
+            </div>
+          </div>
+          <div class="destaque-card">
+            <div class="dc-bg dc-bg-5" style="height:100%">
+              <div class="dc-placeholder">🏘️</div>
+            </div>
+            <div class="dc-overlay"></div>
+            <div class="dc-content">
+              <span class="dc-cat">💼 Negócios</span>
+              <div class="dc-title">Novos empreendimentos na Barra</div>
+              <div class="dc-meta">📈 Mercado aquecido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GASTRONOMIA -->
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-eyebrow">Para comer bem</div>
+            <h2 class="section-title">Gastronomia em <em>Destaque</em></h2>
+          </div>
+          <a href="#" class="see-all" onclick="showPage('gastronomia')">Ver todos →</a>
+        </div>
+
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-2" style="position:relative">
+                <div class="card-icon-bg">🦞</div>
+              </div>
+              <span class="card-badge badge-verde">Frutos do Mar</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Restaurante</div>
+              <div class="card-title">Mariscos da Barra</div>
+              <div class="card-desc">O melhor camarão da região, com vista para o mar e ambiente familiar.</div>
+              <div class="card-footer">
+                <span class="card-meta">⭐ 4.8 · 💰💰</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-3" style="position:relative">
+                <div class="card-icon-bg">🍹</div>
+              </div>
+              <span class="card-badge badge-coral">Bar & Petiscos</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Bar</div>
+              <div class="card-title">Coqueiro Bar & Grill</div>
+              <div class="card-desc">Petiscos artesanais, drinks tropicais e música ao vivo nas noites de fim de semana.</div>
+              <div class="card-footer">
+                <span class="card-meta">⭐ 4.7 · 💰💰</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-1" style="position:relative">
+                <div class="card-icon-bg">🐟</div>
+              </div>
+              <span class="card-badge badge-ocean">Especialidade</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Peixaria</div>
+              <div class="card-title">Peixe na Telha</div>
+              <div class="card-desc">Prato típico sergipano preparado ao estilo tradicional com ingredientes frescos do dia.</div>
+              <div class="card-footer">
+                <span class="card-meta">⭐ 4.9 · 💰💰💰</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AD BANNER -->
+      <div class="ad-banner">
+        <div class="ad-text">
+          <div class="ad-label">Espaço Patrocinado</div>
+          <h3>Seu negócio aqui!</h3>
+          <p>Alcance milhares de moradores e turistas da Barra dos Coqueiros todo dia.</p>
+        </div>
+        <button class="btn-ad" onclick="showPage('anuncie')">📣 Quero anunciar</button>
+      </div>
+
+      <!-- LAZER & TURISMO -->
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-eyebrow">Explore a cidade</div>
+            <h2 class="section-title">Lazer & <em>Turismo</em></h2>
+          </div>
+          <a href="#" class="see-all" onclick="showPage('lazer')">Ver todos →</a>
+        </div>
+
+        <div class="cards-grid col4">
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-1" style="position:relative">
+                <div class="card-icon-bg">🌊</div>
+              </div>
+              <span class="card-badge badge-ocean">Praia</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Praia</div>
+              <div class="card-title">Praia do Viral</div>
+              <div class="card-desc">A mais famosa da Barra, tranquila e de águas claras.</div>
+              <div class="card-footer">
+                <span class="card-meta">📍 2km</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-5" style="position:relative">
+                <div class="card-icon-bg">🌴</div>
+              </div>
+              <span class="card-badge badge-verde">Natureza</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Parque</div>
+              <div class="card-title">Mata dos Coqueiros</div>
+              <div class="card-desc">Trilha ecológica com fauna e flora nativa preservada.</div>
+              <div class="card-footer">
+                <span class="card-meta">📍 5km</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-6" style="position:relative">
+                <div class="card-icon-bg">⛵</div>
+              </div>
+              <span class="card-badge badge-ocean">Náutico</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Passeio</div>
+              <div class="card-title">Passeio de Catamarã</div>
+              <div class="card-desc">Explore as ilhas sergipanas em passeios com saída da orla.</div>
+              <div class="card-footer">
+                <span class="card-meta">📍 Orla</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-thumb">
+              <div class="card-thumb-bg tb-8" style="position:relative">
+                <div class="card-icon-bg">🌅</div>
+              </div>
+              <span class="card-badge badge-dourado">Imperdível</span>
+            </div>
+            <div class="card-body">
+              <div class="card-cat">Mirante</div>
+              <div class="card-title">Mirante Pôr do Sol</div>
+              <div class="card-desc">Vista panorâmica do encontro do rio com o mar.</div>
+              <div class="card-footer">
+                <span class="card-meta">⭐ 5.0</span>
+                <button class="btn-sm">Ver mais</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAPA INTERATIVO -->
+      <div class="page-section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <div class="section-eyebrow">Navegue pela cidade</div>
+            <h2 class="section-title">Mapa <em>Interativo</em></h2>
+          </div>
+        </div>
+        <div class="mapa-container">
+          <div class="mapa-header">
+            <div class="mapa-title">🗺️ Barra dos Coqueiros, SE</div>
+            <div class="mapa-filter">
+              <span class="mapa-tag active">Todos</span>
+              <span class="mapa-tag">Praias</span>
+              <span class="mapa-tag">Restaurantes</span>
+              <span class="mapa-tag">Negócios</span>
+            </div>
+          </div>
+          <iframe
+            class="mapa-embed"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14997.305739316936!2d-37.0583!3d-10.8952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x71abd2d11ca5c81%3A0x8e9b3a2d5d7a9f4c!2sBarra%20dos%20Coqueiros%2C%20SE!5e0!3m2!1spt-BR!2sbr!4v1680000000000!5m2!1spt-BR!2sbr"
+            allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: GUIA DA BARRA ═══ -->
+  <div class="page" id="page-guia">
+    <div class="content-area" style="padding-top:32px">
+      <div class="guia-intro">
+        <h1>Guia Completo da<br><em>Barra dos Coqueiros</em></h1>
+        <p>Tudo que você precisa saber sobre a Barra: praias, serviços, eventos, história e muito mais. A cidade que cresce sem perder sua essência paradisíaca.</p>
+      </div>
+
+      <div class="guia-cards">
+        <div class="guia-mini-card" onclick="showPage('gastronomia')">
+          <span class="guia-mini-icon">🍽️</span>
+          <div class="guia-mini-title">Gastronomia</div>
+          <div class="guia-mini-count">64 locais</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('lazer')">
+          <span class="guia-mini-icon">🏖️</span>
+          <div class="guia-mini-title">Lazer</div>
+          <div class="guia-mini-count">38 opções</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('turismo')">
+          <span class="guia-mini-icon">🧭</span>
+          <div class="guia-mini-title">Turismo</div>
+          <div class="guia-mini-count">22 pontos</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('negocios')">
+          <span class="guia-mini-icon">💼</span>
+          <div class="guia-mini-title">Negócios</div>
+          <div class="guia-mini-count">180+ empresas</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('esportes')">
+          <span class="guia-mini-icon">⚽</span>
+          <div class="guia-mini-title">Esportes</div>
+          <div class="guia-mini-count">15 modalidades</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('estilo')">
+          <span class="guia-mini-icon">✨</span>
+          <div class="guia-mini-title">Estilo de Vida</div>
+          <div class="guia-mini-count">Conteúdo semanal</div>
+        </div>
+        <div class="guia-mini-card" onclick="showPage('encartes')">
+          <span class="guia-mini-icon">🛒</span>
+          <div class="guia-mini-title">Encartes</div>
+          <div class="guia-mini-count">Ofertas da semana</div>
+        </div>
+        <div class="guia-mini-card">
+          <span class="guia-mini-icon">🏥</span>
+          <div class="guia-mini-title">Saúde</div>
+          <div class="guia-mini-count">Em breve</div>
+        </div>
+      </div>
+
+      <div class="mapa-container">
+        <div class="mapa-header">
+          <div class="mapa-title">🗺️ Localização — Barra dos Coqueiros, SE</div>
+        </div>
+        <iframe class="mapa-embed" style="height:380px"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14997.305739316936!2d-37.0583!3d-10.8952!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x71abd2d11ca5c81%3A0x8e9b3a2d5d7a9f4c!2sBarra%20dos%20Coqueiros%2C%20SE!5e0!3m2!1spt-BR!2sbr!4v1680000000000!5m2!1spt-BR!2sbr"
+          allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: SOBRE ═══ -->
+  <div class="page" id="page-sobre">
+    <div class="content-area" style="padding-top:32px">
+      <div class="sobre-hero">
+        <h1>Sobre o <em>Guia Morar Bem</em></h1>
+        <p>Somos o portal digital de referência da Barra dos Coqueiros. Nossa missão é conectar moradores, turistas e empresas com o melhor que a cidade tem a oferecer.</p>
+      </div>
+
+      <div class="sobre-pilares">
+        <div class="pilar-card">
+          <div class="pilar-icon">🌴</div>
+          <div class="pilar-title">Nossa Missão</div>
+          <div class="pilar-desc">Ser a principal referência digital da Barra dos Coqueiros, valorizando o comércio local e a qualidade de vida dos moradores.</div>
+        </div>
+        <div class="pilar-card">
+          <div class="pilar-icon">👁️</div>
+          <div class="pilar-title">Nossa Visão</div>
+          <div class="pilar-desc">Ser o maior guia digital de cidades do nordeste brasileiro, promovendo desenvolvimento local e turismo sustentável.</div>
+        </div>
+        <div class="pilar-card">
+          <div class="pilar-icon">💙</div>
+          <div class="pilar-title">Nossos Valores</div>
+          <div class="pilar-desc">Transparência, comunidade, inovação e amor pela nossa cidade. Acreditamos no poder do digital para transformar realidades locais.</div>
+        </div>
+      </div>
+
+      <div class="ad-banner">
+        <div class="ad-text">
+          <div class="ad-label">Faça parte</div>
+          <h3>Junte-se ao Guia Morar Bem</h3>
+          <p>Seu negócio merece ser encontrado. Anuncie e conecte-se com a comunidade.</p>
+        </div>
+        <button class="btn-ad" onclick="showPage('anuncie')">📣 Saiba mais</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: GASTRONOMIA ═══ -->
+  <div class="page" id="page-gastronomia">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #F4A261 0%, #E76F51 100%)">
+        <h2>🍽️ Gastronomia</h2>
+        <p>Descubra os melhores restaurantes, bares, lanchonetes e experiências gastronômicas da Barra dos Coqueiros.</p>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-eyebrow">Para comer bem</div>
+          <h2 class="section-title">Restaurantes em <em>Destaque</em></h2>
+        </div>
+      </div>
+
+      <div class="cards-grid" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-2" style="position:relative"><div class="card-icon-bg">🦞</div></div><span class="card-badge badge-verde">Frutos do Mar</span></div><div class="card-body"><div class="card-cat">Restaurante</div><div class="card-title">Mariscos da Barra</div><div class="card-desc">Camarão, caranguejo e lagosta frescos todo dia. Vista para o Rio Sergipe.</div><div class="card-footer"><span class="card-meta">⭐ 4.8 · 💰💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-3" style="position:relative"><div class="card-icon-bg">🍹</div></div><span class="card-badge badge-coral">Bar</span></div><div class="card-body"><div class="card-cat">Bar & Petiscos</div><div class="card-title">Coqueiro Bar & Grill</div><div class="card-desc">Drinks tropicais e churrasquinho premiado. O point dos fins de semana.</div><div class="card-footer"><span class="card-meta">⭐ 4.7 · 💰💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-1" style="position:relative"><div class="card-icon-bg">🐟</div></div><span class="card-badge badge-ocean">Regional</span></div><div class="card-body"><div class="card-cat">Culinária Típica</div><div class="card-title">Peixe na Telha Original</div><div class="card-desc">Receita tradicional sergipana com peixe fresco e temperos da região.</div><div class="card-footer"><span class="card-meta">⭐ 4.9 · 💰💰💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-7" style="position:relative"><div class="card-icon-bg">🥥</div></div><span class="card-badge badge-dourado">Artesanal</span></div><div class="card-body"><div class="card-cat">Doceria</div><div class="card-title">Doces da Barra</div><div class="card-desc">Cocada, tapioca e cuscuz recheado. Tradição nordestina em cada mordida.</div><div class="card-footer"><span class="card-meta">⭐ 4.8 · 💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-6" style="position:relative"><div class="card-icon-bg">☕</div></div><span class="card-badge badge-ocean">Café</span></div><div class="card-body"><div class="card-cat">Cafeteria</div><div class="card-title">Café da Orla</div><div class="card-desc">Café especial, bolos caseiros e café da manhã com vista para o mar.</div><div class="card-footer"><span class="card-meta">⭐ 4.7 · 💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-5" style="position:relative"><div class="card-icon-bg">🍕</div></div><span class="card-badge badge-verde">Pizzaria</span></div><div class="card-body"><div class="card-cat">Pizzaria</div><div class="card-title">Pizza Barra</div><div class="card-desc">Pizzas artesanais com ingredientes locais. Sabor do nordeste em cada fatia.</div><div class="card-footer"><span class="card-meta">⭐ 4.6 · 💰💰</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: LAZER ═══ -->
+  <div class="page" id="page-lazer">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #0077B6 0%, #48CAE4 100%)">
+        <h2>🏖️ Lazer</h2>
+        <p>Praias, parques, trilhas e tudo que a natureza exuberante da Barra dos Coqueiros tem para oferecer.</p>
+      </div>
+      <div class="cards-grid col4" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-1" style="position:relative"><div class="card-icon-bg">🌊</div></div><span class="card-badge badge-ocean">Praia</span></div><div class="card-body"><div class="card-cat">Praia</div><div class="card-title">Praia do Viral</div><div class="card-desc">Cartão postal da cidade. Águas calmas e coqueirais.</div><div class="card-footer"><span class="card-meta">⭐ 5.0</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-8" style="position:relative"><div class="card-icon-bg">🌅</div></div><span class="card-badge badge-dourado">Mirante</span></div><div class="card-body"><div class="card-cat">Mirante</div><div class="card-title">Ponto do Pôr do Sol</div><div class="card-desc">Vista única do encontro do Rio Sergipe com o Atlântico.</div><div class="card-footer"><span class="card-meta">⭐ 4.9</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-5" style="position:relative"><div class="card-icon-bg">🌴</div></div><span class="card-badge badge-verde">Natureza</span></div><div class="card-body"><div class="card-cat">Parque</div><div class="card-title">Parque dos Coqueiros</div><div class="card-desc">Área verde com trilhas, playground e espaço para piquenique.</div><div class="card-footer"><span class="card-meta">⭐ 4.7</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-6" style="position:relative"><div class="card-icon-bg">⛵</div></div><span class="card-badge badge-ocean">Náutico</span></div><div class="card-body"><div class="card-cat">Passeio</div><div class="card-title">Travessia de Catamarã</div><div class="card-desc">Passeios para Aracaju e ilhas vizinhas com saída da orla.</div><div class="card-footer"><span class="card-meta">⭐ 4.8</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: TURISMO ═══ -->
+  <div class="page" id="page-turismo">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #52B69A 0%, #023E8A 100%)">
+        <h2>🧭 Turismo</h2>
+        <p>Descubra os principais pontos turísticos, roteiros recomendados e experiências únicas da Barra dos Coqueiros.</p>
+      </div>
+      <div class="cards-grid" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-1" style="position:relative"><div class="card-icon-bg">🌊</div></div><span class="card-badge badge-ocean">Ponto Turístico</span></div><div class="card-body"><div class="card-cat">Praia</div><div class="card-title">Praia do Viral</div><div class="card-desc">O destino mais visitado da Barra, famoso pelas águas transparentes e ambiente tranquilo.</div><div class="card-footer"><span class="card-meta">⭐ 5.0 · Gratuito</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-2" style="position:relative"><div class="card-icon-bg">🌉</div></div><span class="card-badge badge-verde">Estrutura</span></div><div class="card-body"><div class="card-cat">Monumento</div><div class="card-title">Ponte Construtor João Alves</div><div class="card-desc">A icônica ponte que conecta a Barra à capital Aracaju, com vista deslumbrante.</div><div class="card-footer"><span class="card-meta">⭐ 4.8 · Gratuito</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-6" style="position:relative"><div class="card-icon-bg">⛪</div></div><span class="card-badge badge-dourado">História</span></div><div class="card-body"><div class="card-cat">Patrimônio</div><div class="card-title">Igreja Matriz</div><div class="card-desc">Igreja histórica do século XIX, coração cultural e espiritual da cidade.</div><div class="card-footer"><span class="card-meta">⭐ 4.7 · Gratuito</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: ESPORTES ═══ -->
+  <div class="page" id="page-esportes">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #023E8A 0%, #52B69A 100%)">
+        <h2>⚽ Esportes</h2>
+        <p>Futebol, surf, kitesurf, esportes aquáticos e muito mais. A Barra é o paraíso dos esportistas.</p>
+      </div>
+      <div class="cards-grid col4" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-1" style="position:relative"><div class="card-icon-bg">🏄</div></div><span class="card-badge badge-ocean">Aquático</span></div><div class="card-body"><div class="card-cat">Surf</div><div class="card-title">Surf na Barra</div><div class="card-desc">Ondas ideais para iniciantes e intermediários. Escola de surf disponível.</div><div class="card-footer"><span class="card-meta">⭐ 4.8</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-5" style="position:relative"><div class="card-icon-bg">🪁</div></div><span class="card-badge badge-verde">Kite</span></div><div class="card-body"><div class="card-cat">Kitesurf</div><div class="card-title">Kitesurf Barra</div><div class="card-desc">Ventos perfeitos o ano todo. Spot reconhecido nacionalmente.</div><div class="card-footer"><span class="card-meta">⭐ 4.9</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-8" style="position:relative"><div class="card-icon-bg">⚽</div></div><span class="card-badge badge-dourado">Futebol</span></div><div class="card-body"><div class="card-cat">Futebol</div><div class="card-title">Futebol de Areia</div><div class="card-desc">Torneios mensais na praia. Todo mundo pode participar!</div><div class="card-footer"><span class="card-meta">⭐ 4.7</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-3" style="position:relative"><div class="card-icon-bg">🚴</div></div><span class="card-badge badge-coral">Ciclismo</span></div><div class="card-body"><div class="card-cat">Bike</div><div class="card-title">Ciclovia da Orla</div><div class="card-desc">4km de ciclovia com vista para o mar. Aluguel de bikes disponível.</div><div class="card-footer"><span class="card-meta">⭐ 4.6</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: NEGÓCIOS ═══ -->
+  <div class="page" id="page-negocios">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #023E8A 0%, #0077B6 100%)">
+        <h2>💼 Negócios</h2>
+        <p>Encontre empresas, serviços e profissionais da Barra dos Coqueiros. Valorize o comércio local!</p>
+      </div>
+      <div class="cards-grid" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-6" style="position:relative"><div class="card-icon-bg">🏥</div></div><span class="card-badge badge-ocean">Saúde</span></div><div class="card-body"><div class="card-cat">Clínica</div><div class="card-title">Clínica Saúde Barra</div><div class="card-desc">Medicina geral, odontologia e especialidades. Atendimento humanizado.</div><div class="card-footer"><span class="card-meta">⭐ 4.7</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-5" style="position:relative"><div class="card-icon-bg">🏗️</div></div><span class="card-badge badge-verde">Construção</span></div><div class="card-body"><div class="card-cat">Imobiliária</div><div class="card-title">Barra Imóveis</div><div class="card-desc">Casas, apartamentos e terrenos. Os melhores imóveis da cidade.</div><div class="card-footer"><span class="card-meta">⭐ 4.8</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-3" style="position:relative"><div class="card-icon-bg">💇</div></div><span class="card-badge badge-coral">Beleza</span></div><div class="card-body"><div class="card-cat">Salão</div><div class="card-title">Studio Barra Beauty</div><div class="card-desc">Cabelo, estética e bem-estar. As melhores profissionais da região.</div><div class="card-footer"><span class="card-meta">⭐ 4.9</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+      <div class="ad-banner">
+        <div class="ad-text">
+          <div class="ad-label">Destaque seu negócio</div>
+          <h3>Cadastre sua empresa aqui!</h3>
+          <p>Apareça para milhares de moradores e turistas todos os dias.</p>
+        </div>
+        <button class="btn-ad" onclick="showPage('anuncie')">📣 Anunciar agora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: ESTILO DE VIDA ═══ -->
+  <div class="page" id="page-estilo">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #C9A84C 0%, #E76F51 100%)">
+        <h2>✨ Estilo de Vida</h2>
+        <p>Dicas, tendências e conteúdo para quem ama viver bem na Barra dos Coqueiros.</p>
+      </div>
+      <div class="cards-grid" style="margin-bottom:40px">
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-3" style="position:relative"><div class="card-icon-bg">🌅</div></div><span class="card-badge badge-dourado">Bem-estar</span></div><div class="card-body"><div class="card-cat">Qualidade de Vida</div><div class="card-title">5 razões para morar na Barra</div><div class="card-desc">Natureza, tranquilidade, preço acessível e qualidade de vida acima da média.</div><div class="card-footer"><span class="card-meta">📖 5 min de leitura</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-2" style="position:relative"><div class="card-icon-bg">🏃</div></div><span class="card-badge badge-verde">Saúde</span></div><div class="card-body"><div class="card-cat">Fitness</div><div class="card-title">Melhores academias da Barra</div><div class="card-desc">Confira as opções de academia, crossfit e treino funcional na cidade.</div><div class="card-footer"><span class="card-meta">📖 4 min de leitura</span><button class="btn-sm">Ver mais</button></div></div></div>
+        <div class="card"><div class="card-thumb"><div class="card-thumb-bg tb-7" style="position:relative"><div class="card-icon-bg">🌺</div></div><span class="card-badge badge-coral">Eventos</span></div><div class="card-body"><div class="card-cat">Eventos</div><div class="card-title">Agenda cultural da semana</div><div class="card-desc">Shows, feiras, exposições e eventos que acontecem na Barra nesta semana.</div><div class="card-footer"><span class="card-meta">📅 Esta semana</span><button class="btn-sm">Ver mais</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: ENCARTES ═══ -->
+  <div class="page" id="page-encartes">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero" style="background: linear-gradient(135deg, #52B69A 0%, #168AAD 100%)">
+        <h2>🛒 Encartes de Supermercados</h2>
+        <p>As melhores ofertas da semana dos supermercados da Barra dos Coqueiros e região.</p>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-eyebrow">Semana atual</div>
+          <h2 class="section-title">Ofertas em <em>Destaque</em></h2>
+        </div>
+      </div>
+
+      <div class="encartes-grid">
+        <div class="encarte-card">
+          <div class="encarte-thumb" style="background: linear-gradient(135deg, #E63946, #C1121F)">
+            <span style="font-size:48px">🛒</span>
+            <span class="encarte-badge">Novo!</span>
+          </div>
+          <div class="encarte-info">
+            <div class="encarte-name">Mercadão da Barra</div>
+            <div class="encarte-valid">Válido até 28/07/2025</div>
+          </div>
+        </div>
+        <div class="encarte-card">
+          <div class="encarte-thumb" style="background: linear-gradient(135deg, #2D6A4F, #40916C)">
+            <span style="font-size:48px">🥩</span>
+          </div>
+          <div class="encarte-info">
+            <div class="encarte-name">Superbom Atacarejo</div>
+            <div class="encarte-valid">Válido até 27/07/2025</div>
+          </div>
+        </div>
+        <div class="encarte-card">
+          <div class="encarte-thumb" style="background: linear-gradient(135deg, #F4A261, #E76F51)">
+            <span style="font-size:48px">🥦</span>
+            <span class="encarte-badge">Semana</span>
+          </div>
+          <div class="encarte-info">
+            <div class="encarte-name">Hortifrutti Barra</div>
+            <div class="encarte-valid">Válido até 26/07/2025</div>
+          </div>
+        </div>
+        <div class="encarte-card">
+          <div class="encarte-thumb" style="background: linear-gradient(135deg, #023E8A, #0077B6)">
+            <span style="font-size:48px">🥛</span>
+          </div>
+          <div class="encarte-info">
+            <div class="encarte-name">Padaria Coqueiro</div>
+            <div class="encarte-valid">Válido até 25/07/2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: ANUNCIE ═══ -->
+  <div class="page" id="page-anuncie">
+    <div class="content-area" style="padding-top:32px">
+      <div class="anuncie-hero">
+        <h2>Anuncie no Guia Morar Bem</h2>
+        <p>Conecte sua empresa a milhares de moradores, turistas e pessoas que buscam o melhor da Barra dos Coqueiros todos os dias.</p>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title-group">
+          <div class="section-eyebrow">Nossas opções</div>
+          <h2 class="section-title">Escolha seu <em>Plano</em></h2>
+        </div>
+      </div>
+
+      <div class="planos-grid">
+        <div class="plano-card">
+          <div class="plano-icon">🌱</div>
+          <div class="plano-name">Básico</div>
+          <div class="plano-preco">R$ 89 <span>/mês</span></div>
+          <div class="plano-desc">Ideal para começar e aparecer no guia</div>
+          <ul class="plano-features">
+            <li>Listagem no guia</li>
+            <li>Foto e descrição</li>
+            <li>Link para WhatsApp</li>
+            <li>1 categoria</li>
+          </ul>
+          <button class="btn-plano" onclick="scrollToForm()">Começar agora</button>
+        </div>
+
+        <div class="plano-card featured">
+          <span class="plano-badge">✨ Mais popular</span>
+          <div class="plano-icon">🚀</div>
+          <div class="plano-name">Destaque</div>
+          <div class="plano-preco">R$ 189 <span>/mês</span></div>
+          <div class="plano-desc">Máxima visibilidade para seu negócio</div>
+          <ul class="plano-features">
+            <li>Tudo do plano Básico</li>
+            <li>Card em destaque na home</li>
+            <li>3 fotos + galeria</li>
+            <li>3 categorias</li>
+            <li>Selo de verificado ✓</li>
+            <li>Relatório mensal</li>
+          </ul>
+          <button class="btn-plano featured-btn" onclick="scrollToForm()">Quero este plano</button>
+        </div>
+
+        <div class="plano-card">
+          <div class="plano-icon">👑</div>
+          <div class="plano-name">Premium</div>
+          <div class="plano-preco">R$ 349 <span>/mês</span></div>
+          <div class="plano-desc">Para quem quer dominar o guia</div>
+          <ul class="plano-features">
+            <li>Tudo do plano Destaque</li>
+            <li>Banner no topo do site</li>
+            <li>Post nas redes sociais</li>
+            <li>Categorias ilimitadas</li>
+            <li>Dashboard completo</li>
+            <li>Suporte prioritário</li>
+          </ul>
+          <button class="btn-plano" onclick="scrollToForm()">Falar com equipe</button>
+        </div>
+      </div>
+
+      <div class="form-grid" id="anuncie-form-section">
+        <div class="form-card">
+          <h3>📋 Solicitar Anúncio</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nome completo *</label>
+              <input type="text" class="form-input" id="an-nome" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Empresa *</label>
+              <input type="text" class="form-input" id="an-empresa" placeholder="Nome da empresa">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-input" id="an-email" placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefone / WhatsApp *</label>
+              <input type="tel" class="form-input" id="an-tel" placeholder="(79) 9 9999-9999">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plano de interesse</label>
+            <select class="form-select" id="an-plano">
+              <option value="">Selecione um plano</option>
+              <option value="basico">Básico — R$ 89/mês</option>
+              <option value="destaque">Destaque — R$ 189/mês ⭐</option>
+              <option value="premium">Premium — R$ 349/mês 👑</option>
+              <option value="consulta">Quero uma consulta gratuita</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mensagem</label>
+            <textarea class="form-textarea" id="an-msg" placeholder="Conte sobre seu negócio e o que espera do anúncio..."></textarea>
+          </div>
+          <button class="btn-form" onclick="enviarAnuncio()">
+            <span>📣</span> Enviar via WhatsApp
+          </button>
+        </div>
+
+        <div class="form-info-card">
+          <h3>Por que anunciar conosco?</h3>
+          <div class="contact-item">
+            <div class="contact-icon">📊</div>
+            <div>
+              <div class="contact-label">Alcance diário</div>
+              <div class="contact-value">+5.000 visualizações/dia</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">🎯</div>
+            <div>
+              <div class="contact-label">Público qualificado</div>
+              <div class="contact-value">Moradores e turistas da Barra</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <div class="contact-label">Mobile First</div>
+              <div class="contact-value">80% do acesso é pelo celular</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <div>
+              <div class="contact-label">Suporte WhatsApp</div>
+              <div class="contact-value">(79) 9 9999-9999</div>
+            </div>
+          </div>
+          <div class="contact-item" style="border-bottom:none">
+            <div class="contact-icon">✅</div>
+            <div>
+              <div class="contact-label">Resultado comprovado</div>
+              <div class="contact-value">+180 anunciantes satisfeitos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: CONTATO ═══ -->
+  <div class="page" id="page-contato">
+    <div class="content-area" style="padding-top:32px">
+      <div class="form-page-hero">
+        <h2>💬 Fale Conosco</h2>
+        <p>Tem alguma dúvida, sugestão ou quer indicar um negócio? Entre em contato com a nossa equipe!</p>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-card">
+          <h3>📬 Envie sua mensagem</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nome *</label>
+              <input type="text" class="form-input" id="ct-nome" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-input" id="ct-email" placeholder="seu@email.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefone / WhatsApp</label>
+            <input type="tel" class="form-input" id="ct-tel" placeholder="(79) 9 9999-9999">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assunto</label>
+            <select class="form-select" id="ct-assunto">
+              <option value="">Selecione o assunto</option>
+              <option>Sugestão de negócio</option>
+              <option>Reportar erro</option>
+              <option>Parceria</option>
+              <option>Imprensa</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mensagem *</label>
+            <textarea class="form-textarea" id="ct-msg" placeholder="Escreva sua mensagem aqui..."></textarea>
+          </div>
+          <button class="btn-form" onclick="enviarContato()">
+            <span>💬</span> Enviar via WhatsApp
+          </button>
+        </div>
+
+        <div class="form-info-card">
+          <h3>Contato Direto</h3>
+          <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <div>
+              <div class="contact-label">WhatsApp</div>
+              <div class="contact-value">(79) 9 9999-9999</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-value">contato@guiamorarbem.com.br</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <div class="contact-label">Localização</div>
+              <div class="contact-value">Barra dos Coqueiros, SE</div>
+            </div>
+          </div>
+          <div class="contact-item" style="border-bottom:none">
+            <div class="contact-icon">🕐</div>
+            <div>
+              <div class="contact-label">Atendimento</div>
+              <div class="contact-value">Seg–Sex: 8h–18h</div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px">
+            <div style="font-size:13px;font-weight:600;color:var(--texto);margin-bottom:12px">Redes Sociais</div>
+            <div class="social-links">
+              <div class="social-link">📸</div>
+              <div class="social-link">👥</div>
+              <div class="social-link">💬</div>
+              <div class="social-link">▶️</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /main-wrapper -->
+
+<!-- ─── MOBILE TOGGLE ─── -->
+<button class="mobile-toggle" id="mobileToggle" onclick="toggleMobile()">☰</button>
+
+<!-- ─── SUCCESS MODAL ─── -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <span class="modal-icon" id="modalIcon">✅</span>
+    <div class="modal-title" id="modalTitle">Mensagem enviada!</div>
+    <div class="modal-desc" id="modalDesc">Sua mensagem foi enviada com sucesso. Nossa equipe entrará em contato em breve!</div>
+    <button class="btn-primary" onclick="closeModal()" style="width:100%;justify-content:center">
+      Perfeito, obrigado! 🎉
+    </button>
+  </div>
+</div>
+
+<script>
+// ─── SIDEBAR ───
+let sidebarCollapsed = false;
+let mobileOpen = false;
+
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  const sidebar = document.getElementById('sidebar');
+  const wrapper = document.getElementById('main-wrapper');
+  const icon = document.getElementById('toggle-icon');
+
+  sidebar.classList.toggle('collapsed', sidebarCollapsed);
+  wrapper.classList.toggle('expanded', sidebarCollapsed);
+  icon.textContent = sidebarCollapsed ? '▶' : '◀';
+}
+
+function toggleMobile() {
+  mobileOpen = !mobileOpen;
+  document.getElementById('sidebar').classList.toggle('mobile-open', mobileOpen);
+}
+
+// ─── PAGES ───
+const pageTitles = {
+  home: 'Início',
+  guia: 'Guia da Barra',
+  sobre: 'Sobre o Guia',
+  gastronomia: 'Gastronomia',
+  lazer: 'Lazer',
+  turismo: 'Turismo',
+  esportes: 'Esportes',
+  negocios: 'Negócios',
+  estilo: 'Estilo de Vida',
+  encartes: 'Encartes',
+  anuncie: 'Anuncie no Guia',
+  contato: 'Fale Conosco'
+};
+
+function showPage(pageId) {
+  // Hide all
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  // Show target
+  const page = document.getElementById('page-' + pageId);
+  if (page) {
+    page.classList.add('active');
+    page.scrollIntoView ? window.scrollTo(0, 0) : null;
+  }
+
+  // Activate nav
+  const navItem = document.querySelector(`[data-page="${pageId}"]`);
+  if (navItem) navItem.classList.add('active');
+
+  // Breadcrumb
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = pageId === 'home'
+    ? '<span>Início</span>'
+    : `Início · <span>${pageTitles[pageId] || pageId}</span>`;
+
+  // Close mobile
+  if (mobileOpen) {
+    mobileOpen = false;
+    document.getElementById('sidebar').classList.remove('mobile-open');
+  }
+}
+
+// ─── HERO CARROSSEL ───
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const dotsContainer = document.getElementById('heroDots');
+
+// Criar dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goToSlide(i);
+  dotsContainer.appendChild(dot);
+});
+
+function goToSlide(n) {
+  currentSlide = n;
+  document.getElementById('heroSlides').style.transform = `translateX(-${n * 100}%)`;
+  document.querySelectorAll('.hero-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n);
+  });
+}
+
+function nextSlide() {
+  goToSlide((currentSlide + 1) % slides.length);
+}
+
+setInterval(nextSlide, 4500);
+
+// ─── MAPA FILTER TAGS ───
+document.querySelectorAll('.mapa-tag').forEach(tag => {
+  tag.addEventListener('click', function() {
+    document.querySelectorAll('.mapa-tag').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ─── FORMULÁRIO ANUNCIE ───
+function enviarAnuncio() {
+  const nome = document.getElementById('an-nome').value.trim();
+  const empresa = document.getElementById('an-empresa').value.trim();
+  const email = document.getElementById('an-email').value.trim();
+  const tel = document.getElementById('an-tel').value.trim();
+  const plano = document.getElementById('an-plano').value;
+  const msg = document.getElementById('an-msg').value.trim();
+
+  if (!nome || !empresa || !email || !tel) {
+    alert('Por favor, preencha os campos obrigatórios (*)');
+    return;
+  }
+
+  const planosTexto = {
+    basico: 'Básico — R$ 89/mês',
+    destaque: 'Destaque — R$ 189/mês ⭐',
+    premium: 'Premium — R$ 349/mês 👑',
+    consulta: 'Consulta gratuita'
+  };
+
+  const texto = `*SOLICITAÇÃO DE ANÚNCIO — Guia Morar Bem*%0A%0A`
+    + `👤 *Nome:* ${nome}%0A`
+    + `🏢 *Empresa:* ${empresa}%0A`
+    + `📧 *Email:* ${email}%0A`
+    + `📱 *WhatsApp:* ${tel}%0A`
+    + `📦 *Plano:* ${planosTexto[plano] || 'Não informado'}%0A`
+    + (msg ? `💬 *Mensagem:* ${msg}` : '');
+
+  const numero = '5579999999999'; // ← Substitua pelo número real
+  window.open(`https://wa.me/${numero}?text=${texto}`, '_blank');
+
+  showModal('📣', 'Solicitação enviada!', 'Sua mensagem foi encaminhada via WhatsApp. Nossa equipe comercial entrará em contato em até 24 horas!');
+
+  // Limpar formulário
+  ['an-nome','an-empresa','an-email','an-tel','an-plano','an-msg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+// ─── FORMULÁRIO CONTATO ───
+function enviarContato() {
+  const nome = document.getElementById('ct-nome').value.trim();
+  const email = document.getElementById('ct-email').value.trim();
+  const tel = document.getElementById('ct-tel').value.trim();
+  const assunto = document.getElementById('ct-assunto').value;
+  const msg = document.getElementById('ct-msg').value.trim();
+
+  if (!nome || !email || !msg) {
+    alert('Por favor, preencha os campos obrigatórios (*)');
+    return;
+  }
+
+  const texto = `*MENSAGEM — Guia Morar Bem*%0A%0A`
+    + `👤 *Nome:* ${nome}%0A`
+    + `📧 *Email:* ${email}%0A`
+    + (tel ? `📱 *Telefone:* ${tel}%0A` : '')
+    + (assunto ? `📌 *Assunto:* ${assunto}%0A` : '')
+    + `💬 *Mensagem:* ${msg}`;
+
+  const numero = '5579999999999'; // ← Substitua pelo número real
+  window.open(`https://wa.me/${numero}?text=${texto}`, '_blank');
+
+  showModal('✅', 'Mensagem enviada!', 'Recebemos sua mensagem e entraremos em contato em breve. Obrigado por nos escrever!');
+
+  ['ct-nome','ct-email','ct-tel','ct-assunto','ct-msg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+// ─── MODAL ───
+function showModal(icon, title, desc) {
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalDesc').textContent = desc;
+  document.getElementById('successModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('show');
+}
+
+document.getElementById('successModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function scrollToForm() {
+  const el = document.getElementById('anuncie-form-section');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── CARD HOVER TOUCH (mobile) ───
+document.querySelectorAll('.card, .destaque-card').forEach(card => {
+  card.addEventListener('touchstart', () => card.classList.add('touch-active'), { passive: true });
+  card.addEventListener('touchend', () => setTimeout(() => card.classList.remove('touch-active'), 300), { passive: true });
+});
+</script>
+</body>
+</html>
